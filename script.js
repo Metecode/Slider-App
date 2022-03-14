@@ -1,7 +1,7 @@
 //add images value
 var models = [
 {
-    name: 'legolas',
+    name: 'Legolas',
     image: '/assets/img/legolas.jpg',
     text: 'Nay, time does not tarry ever, but change and growth is not in all things and places alike. For the Elves the world moves, and it moves both very swift and very slow.',
     link:'https://lotr.fandom.com/wiki/Legolas'
@@ -9,13 +9,13 @@ var models = [
 {
     name: 'Gimli',
     image: '/assets/img/Gimli.webp',
-    text: 'Gimli, son of Glóin, was a Dwarf of the House of Durin and a member of the Fellowship of the Ring. Unlike other Dwarves, he readily fought alongside Elves in the War of the Ring against Sauron at the end of the Third Age. After the defeat of Sauron, in the early Fourth Age, he was given the lordship over the Glittering Caves at Hel',
+    text: 'Gimli, son of Glóin, was a Dwarf of the House of Durin and a member of the Fellowship of the Ring. ',
     link:'https://lotr.fandom.com/wiki/Gimli'
 },
 {
     name: 'Gandalf',
     image: '/assets/img/gandalf.jpeg',
-    text: 'Gandalf the Grey, later known as Gandalf the White, and originally named Olórin (Quenya; IPA: [oˈloːrin]), was an Istar (Wizard), dispatched to Middle-earth in the Third Age to combat the threat of Sauron. He joined Thorin II Oakenshield and his company to reclaim the Lonely Mountain from Smaug, helped form the Fellowship of the Ring to destroy the One Ring, and led the Free Peoples in the final campaign of the War of the Ring.',
+    text: 'Gandalf the Grey, later known as Gandalf the White, and originally named Olórin (Quenya; IPA: [oˈloːrin]), was an Istar (Wizard),  .',
     link:'https://lotr.fandom.com/wiki/Gandalf'
 },
 {
@@ -27,18 +27,61 @@ var models = [
 {
     name: 'Sauron',
     image: '/assets/img/sauron.jpg',
-    text: 'Sauron (Quenya: IPA [ˈsaʊron] or [ˈθaʊron]), the eponymous Lord of the Rings, originally named Mairon, was the greatest subversive Maia, the maker of the One Ring, a gifted student of the Vala Aulë, and the most trusted lieutenant of Morgoth.',
+    text: 'Sauron (Quenya: IPA [ˈsaʊron] or [ˈθaʊron]), the eponymous Lord of the Rings, originally named Mairon, was the greatest subversive Maia.',
     link:'https://lotr.fandom.com/wiki/Sauron'
 },
 ]
 
 var index = 0;
+var slaytCount = models.length;
+var interval;
+var settings = {
+    duration : '2000',
+    random : false //true
+}
+
+init(settings);
 
 const buttonR = document.querySelector('.fa-arrow-right');
 const buttonL = document.querySelector('.fa-arrow-left');
 
 buttonR.addEventListener('click' , indexUp)
 buttonL.addEventListener('click' , indexLower)
+
+document.querySelectorAll('.arrow').forEach(function(item){
+    item.addEventListener('mouseenter' , function(){
+        clearInterval(interval);
+    })
+})
+
+document.querySelectorAll('.arrow').forEach(function(item){
+    item.addEventListener('mouseleave' , function(){
+        init(settings);
+    })
+})
+
+// oto slide
+function init(settings){
+    var prev;
+    interval = setInterval(function(){
+        if(settings.random){
+            //random index
+            do{
+                index = Math.floor(Math.random() * slaytCount);
+            }while(index == prev)
+            prev = index;
+        }else{
+            //artan index
+            if(slaytCount == index +1){
+                index = -1;
+            }
+            showSlide(index);
+            index++;
+        }
+        showSlide(index);
+    },settings.duration)
+}
+
 
 // change slide
 function indexUp(){
@@ -55,9 +98,9 @@ function indexLower(){
 function showSlide(i){
     index = i;
     if(i < 0){
-        index = models.length -1;
+        index = slaytCount -1;
     }
-    if(i === models.length){
+    if(i === slaytCount){
         index = 0;
     }
     document.querySelector('.card-title').innerHTML = (models[index].name);
